@@ -1,9 +1,9 @@
 import CrudPage from "../components/CrudPage";
 
-export default function Reviews() {
+export default function AdminReviews() {
     return (
         <CrudPage
-            title="Reviews"
+            title="Manage Reviews"
             endpoint="/reviews"
             fields={[
                 { name: "userId", label: "User ID", type: "number", required: true },

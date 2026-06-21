@@ -1,9 +1,9 @@
 import CrudPage from "../components/CrudPage";
 
-export default function Categories() {
+export default function AdminCategories() {
     return (
         <CrudPage
-            title="Categories"
+            title="Manage Categories"
             endpoint="/categories"
             fields={[
                 { name: "name", label: "Name", required: true },

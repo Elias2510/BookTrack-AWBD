@@ -1,9 +1,9 @@
 import CrudPage from "../components/CrudPage";
 
-export default function Authors() {
+export default function AdminAuthors() {
     return (
         <CrudPage
-            title="Authors"
+            title="Manage Authors"
             endpoint="/authors"
             fields={[
                 { name: "name", label: "Name", required: true },
