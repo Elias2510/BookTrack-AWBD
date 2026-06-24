@@ -89,7 +89,7 @@ function MyReadingLists() {
                     value={categoryFilter}
                     onChange={(e) => setCategoryFilter(e.target.value)}
                 >
-                    <option value="">Toate categoriile</option>
+                    <option value="">Categories</option>
                     {categories.map((category) => (
                         <option key={category} value={category}>
                             {category}
