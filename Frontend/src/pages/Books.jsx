@@ -16,6 +16,14 @@ function Books() {
 
     const user = JSON.parse(localStorage.getItem("user"));
 
+    const reviewOptions = [
+        "Excellent - 5 stars",
+        "Very Good - 4 stars",
+        "Good - 3 stars",
+        "Average - 2 stars",
+        "Poor - 1 star"
+    ];
+
     const loadBooks = () => {
         api.get("/books?page=0&size=100&sort=title,asc")
             .then((res) => setBooks(res.data.content || []))
@@ -40,6 +48,11 @@ function Books() {
     const handleAddBook = async (e) => {
         e.preventDefault();
 
+        if (!description) {
+            alert("Selectează un review.");
+            return;
+        }
+
         try {
             await api.post("/books", {
                 title,
@@ -47,7 +60,7 @@ function Books() {
                 publicationDate,
                 description,
                 authorId: Number(authorId),
-                categoryId: Number(categoryId),
+                categoryId: Number(categoryId)
             });
 
             setTitle("");
@@ -61,6 +74,7 @@ function Books() {
             loadBooks();
             alert("Cartea a fost adăugată cu succes!");
         } catch (error) {
+            console.error(error);
             alert("Eroare la adăugarea cărții.");
         }
     };
@@ -75,11 +89,12 @@ function Books() {
             await api.post("/reading-lists", {
                 name: "My Reading List",
                 userId: user.id,
-                bookIds: [bookId],
+                bookIds: [bookId]
             });
 
             alert("Cartea a fost adăugată în Reading List!");
         } catch (error) {
+            console.error(error);
             alert("Eroare la adăugarea în Reading List.");
         }
     };
@@ -87,9 +102,10 @@ function Books() {
     return (
         <section>
             <div className="section-header">
-                <p className="eyebrow">Library</p>
-                <h1>Explore Books</h1>
-                <p>Descoperă cărțile disponibile și organizează-ți lecturile.</p>
+                <div>
+                    <p className="eyebrow">Library</p>
+                    <h1>Explore Books</h1>
+                </div>
 
                 {user && (
                     <button onClick={() => setShowForm(!showForm)}>
@@ -125,11 +141,18 @@ function Books() {
                             required
                         />
 
-                        <textarea
-                            placeholder="Descriere / review scurt"
+                        <select
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                        />
+                            required
+                        >
+                            <option value="">Selectează review-ul</option>
+                            {reviewOptions.map((review) => (
+                                <option key={review} value={review}>
+                                    {review}
+                                </option>
+                            ))}
+                        </select>
 
                         <select
                             value={authorId}
@@ -168,17 +191,23 @@ function Books() {
                         <div className="book-cover">📖</div>
 
                         <h3>{book.title}</h3>
-                        <p>{book.description || "No description available."}</p>
 
-                        <span>{book.author?.name || "Unknown author"}</span>
-                        <br />
-                        <span>{book.category?.name || "No category"}</span>
+                        <p className="book-review">
+                            Review:{" "}
+                            {book.description && book.description.trim() !== ""
+                                ? book.description
+                                : "No review available."}
+                        </p>
 
-                        {user && (
-                            <button onClick={() => addToReadingList(book.id)}>
-                                Add to Reading List
-                            </button>
-                        )}
+                        <span>
+                            Author: {book.author?.name || "Unknown author"}
+                        </span>
+
+                        <span>
+                            Category: {book.category?.name || "No category"}
+                        </span>
+
+
                     </article>
                 ))}
             </div>

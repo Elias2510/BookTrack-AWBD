@@ -1,5 +1,6 @@
 package com.booktrack.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,9 +39,15 @@ public class Book {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+            mappedBy = "book",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
+    )
     private List<Review> reviews = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "books")
     private List<ReadingList> readingLists = new ArrayList<>();
 }

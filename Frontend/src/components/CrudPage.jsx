@@ -3,7 +3,7 @@ import api from "../api/api";
 
 function CrudPage({ title, endpoint, fields }) {
     const initialForm = fields.reduce((acc, field) => {
-        acc[field.name] = field.type === "number" ? "" : "";
+        acc[field.name] = "";
         return acc;
     }, {});
 
@@ -17,7 +17,7 @@ function CrudPage({ title, endpoint, fields }) {
             const res = await api.get(endpoint);
             setItems(res.data.content || res.data);
         } catch {
-            setError("Nu s-au putut încărca datele.");
+            setError("Data could not be loaded.");
         }
     };
 
@@ -40,7 +40,7 @@ function CrudPage({ title, endpoint, fields }) {
 
         for (const field of fields) {
             if (field.required && !form[field.name]) {
-                setError(`Câmpul ${field.label} este obligatoriu.`);
+                setError(`${field.label} is required.`);
                 return;
             }
         }
@@ -55,7 +55,7 @@ function CrudPage({ title, endpoint, fields }) {
             resetForm();
             loadItems();
         } catch {
-            setError("Operația nu a putut fi realizată.");
+            setError("The operation could not be completed.");
         }
     };
 
@@ -69,13 +69,13 @@ function CrudPage({ title, endpoint, fields }) {
     };
 
     const handleDelete = async (id) => {
-        if (!window.confirm("Sigur vrei să ștergi acest element?")) return;
+        if (!window.confirm("Are you sure you want to delete this item?")) return;
 
         try {
             await api.delete(`${endpoint}/${id}`);
             loadItems();
         } catch {
-            setError("Elementul nu a putut fi șters.");
+            setError("The item could not be deleted.");
         }
     };
 
@@ -86,16 +86,33 @@ function CrudPage({ title, endpoint, fields }) {
             {error && <p className="error">{error}</p>}
 
             <form className="form" onSubmit={handleSubmit}>
-                {fields.map((field) => (
-                    <input
-                        key={field.name}
-                        type={field.type || "text"}
-                        name={field.name}
-                        placeholder={field.label}
-                        value={form[field.name]}
-                        onChange={handleChange}
-                    />
-                ))}
+                {fields.map((field) =>
+                    field.type === "select" ? (
+                        <select
+                            key={field.name}
+                            name={field.name}
+                            value={form[field.name]}
+                            onChange={handleChange}
+                        >
+                            <option value="">Select {field.label}</option>
+
+                            {field.options?.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
+                    ) : (
+                        <input
+                            key={field.name}
+                            type={field.type || "text"}
+                            name={field.name}
+                            placeholder={field.label}
+                            value={form[field.name]}
+                            onChange={handleChange}
+                        />
+                    )
+                )}
 
                 <button type="submit">
                     {editingId ? "Update" : "Create"}
@@ -116,7 +133,7 @@ function CrudPage({ title, endpoint, fields }) {
                         {fields.map((field) => (
                             <th key={field.name}>{field.label}</th>
                         ))}
-                        <th>Acțiuni</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
 
@@ -124,6 +141,7 @@ function CrudPage({ title, endpoint, fields }) {
                     {items.map((item) => (
                         <tr key={item.id}>
                             <td>{item.id}</td>
+
                             {fields.map((field) => (
                                 <td key={field.name}>
                                     {typeof item[field.name] === "object"
@@ -131,6 +149,7 @@ function CrudPage({ title, endpoint, fields }) {
                                         : item[field.name] || "-"}
                                 </td>
                             ))}
+
                             <td>
                                 <button onClick={() => handleEdit(item)}>Edit</button>
                                 <button className="danger" onClick={() => handleDelete(item.id)}>

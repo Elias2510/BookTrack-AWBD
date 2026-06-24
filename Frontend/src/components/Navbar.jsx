@@ -5,7 +5,11 @@ function Navbar() {
 
     const user = JSON.parse(localStorage.getItem("user"));
 
-    const isAdmin = user?.role?.name === "ADMIN";
+    const userRole = user?.role?.name || user?.role;
+    const isAdmin =
+        userRole === "ADMIN" || userRole === "ROLE_ADMIN";
+
+    const isUser = !!user && !isAdmin;
 
     const handleLogout = () => {
         localStorage.removeItem("user");
@@ -20,13 +24,17 @@ function Navbar() {
             <div className="nav-links">
                 <NavLink to="/">Home</NavLink>
 
-                <NavLink to="/books">
-                    Books
-                </NavLink>
+                {isUser && (
+                    <>
+                        <NavLink to="/books">
+                            Books
+                        </NavLink>
 
-                <NavLink to="/reading-lists">
-                    Reading Lists
-                </NavLink>
+                        <NavLink to="/reading-lists">
+                            Reading Lists
+                        </NavLink>
+                    </>
+                )}
 
                 {isAdmin && (
                     <NavLink to="/admin">
