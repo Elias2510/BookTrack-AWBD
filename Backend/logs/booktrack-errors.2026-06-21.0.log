@@ -1,0 +1,2 @@
+2026-06-21 22:10:25 ERROR com.booktrack.service.UserService - Role not found with id: 1
+2026-06-21 22:26:44 ERROR com.booktrack.service.BookService - Author not found with id: 1
