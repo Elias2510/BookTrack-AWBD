@@ -225,3 +225,8 @@ java.lang.RuntimeException: Email sau parolă incorectă.
 2026-06-25 11:28:57 DEBUG com.booktrack.service.BookService - Fetching books with pageable: Page request [number: 0, size 100, sort: UNSORTED]
 2026-06-25 11:30:29 DEBUG com.booktrack.service.BookService - Fetching books with pageable: Page request [number: 0, size 100, sort: title: ASC]
 2026-06-25 11:30:29 DEBUG com.booktrack.service.BookService - Fetching books with pageable: Page request [number: 0, size 100, sort: title: ASC]
+2026-06-25 12:42:08 INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-25 12:42:08 INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-06-25 12:42:08 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-25 12:42:08 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-25 12:42:08 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

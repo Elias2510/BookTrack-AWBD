@@ -13,3 +13,11 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com.booktrack: DEBUG
+    org.springframework.security: INFO
