@@ -49,7 +49,7 @@ function Books() {
         e.preventDefault();
 
         if (!description) {
-            alert("Selectează un review.");
+            alert("Please select a review.");
             return;
         }
 
@@ -72,115 +72,60 @@ function Books() {
             setShowForm(false);
 
             loadBooks();
-            alert("Cartea a fost adăugată cu succes!");
+            alert("Book added successfully!");
         } catch (error) {
             console.error(error);
-            alert("Eroare la adăugarea cărții.");
-        }
-    };
-
-    const addToReadingList = async (bookId) => {
-        if (!user) {
-            alert("Trebuie să fii logat.");
-            return;
-        }
-
-        try {
-            await api.post("/reading-lists", {
-                name: "My Reading List",
-                userId: user.id,
-                bookIds: [bookId]
-            });
-
-            alert("Cartea a fost adăugată în Reading List!");
-        } catch (error) {
-            console.error(error);
-            alert("Eroare la adăugarea în Reading List.");
+            alert("Could not add the book.");
         }
     };
 
     return (
-        <section>
-            <div className="section-header">
+        <main className="page-shell">
+            <section className="page-hero compact">
                 <div>
-                    <p className="eyebrow">Library</p>
+                    <p className="eyebrow">Digital Library</p>
                     <h1>Explore Books</h1>
+                    <p>Browse your collection, discover categories, track reviews and manage your personal reading universe.</p>
                 </div>
 
                 {user && (
                     <button onClick={() => setShowForm(!showForm)}>
-                        {showForm ? "Închide formularul" : "Adaugă carte"}
+                        {showForm ? "Close Form" : "Add Book"}
                     </button>
                 )}
-            </div>
+            </section>
 
             {showForm && (
-                <section className="card">
-                    <h2>Adaugă o carte citită</h2>
+                <section className="card form-card">
+                    <h2>Add a Read Book</h2>
 
                     <form className="auth-form" onSubmit={handleAddBook}>
-                        <input
-                            type="text"
-                            placeholder="Titlu"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            required
-                        />
+                        <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                        <input type="text" placeholder="ISBN" value={isbn} onChange={(e) => setIsbn(e.target.value)} />
+                        <input type="date" value={publicationDate} onChange={(e) => setPublicationDate(e.target.value)} required />
 
-                        <input
-                            type="text"
-                            placeholder="ISBN"
-                            value={isbn}
-                            onChange={(e) => setIsbn(e.target.value)}
-                        />
-
-                        <input
-                            type="date"
-                            value={publicationDate}
-                            onChange={(e) => setPublicationDate(e.target.value)}
-                            required
-                        />
-
-                        <select
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            required
-                        >
-                            <option value="">Selectează review-ul</option>
+                        <select value={description} onChange={(e) => setDescription(e.target.value)} required>
+                            <option value="">Select review</option>
                             {reviewOptions.map((review) => (
-                                <option key={review} value={review}>
-                                    {review}
-                                </option>
+                                <option key={review} value={review}>{review}</option>
                             ))}
                         </select>
 
-                        <select
-                            value={authorId}
-                            onChange={(e) => setAuthorId(e.target.value)}
-                            required
-                        >
-                            <option value="">Selectează autorul</option>
+                        <select value={authorId} onChange={(e) => setAuthorId(e.target.value)} required>
+                            <option value="">Select author</option>
                             {authors.map((author) => (
-                                <option key={author.id} value={author.id}>
-                                    {author.name}
-                                </option>
+                                <option key={author.id} value={author.id}>{author.name}</option>
                             ))}
                         </select>
 
-                        <select
-                            value={categoryId}
-                            onChange={(e) => setCategoryId(e.target.value)}
-                            required
-                        >
-                            <option value="">Selectează categoria</option>
+                        <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
+                            <option value="">Select category</option>
                             {categories.map((category) => (
-                                <option key={category.id} value={category.id}>
-                                    {category.name}
-                                </option>
+                                <option key={category.id} value={category.id}>{category.name}</option>
                             ))}
                         </select>
 
-                        <button type="submit">Salvează cartea</button>
+                        <button type="submit">Save Book</button>
                     </form>
                 </section>
             )}
@@ -189,29 +134,14 @@ function Books() {
                 {books.map((book) => (
                     <article className="book-card" key={book.id}>
                         <div className="book-cover">📖</div>
-
                         <h3>{book.title}</h3>
-
-                        <p className="book-review">
-                            Review:{" "}
-                            {book.description && book.description.trim() !== ""
-                                ? book.description
-                                : "No review available."}
-                        </p>
-
-                        <span>
-                            Author: {book.author?.name || "Unknown author"}
-                        </span>
-
-                        <span>
-                            Category: {book.category?.name || "No category"}
-                        </span>
-
-
+                        <p className="book-review">{book.description || "No review available."}</p>
+                        <span>Author: {book.author?.name || "Unknown Author"}</span>
+                        <span>Category: {book.category?.name || "No Category"}</span>
                     </article>
                 ))}
             </div>
-        </section>
+        </main>
     );
 }
 

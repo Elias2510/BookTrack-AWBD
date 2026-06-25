@@ -7,6 +7,7 @@ import MyReadingLists from "./pages/MyReadingLists";
 import AdminDashboard from "./pages/AdminDashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Statistics from "./pages/Statistics";
 
 import "./App.css";
 
@@ -22,7 +23,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/books" element={<Books />} />
                     <Route path="/reading-lists" element={<MyReadingLists />} />
-
+                    <Route path="/statistics" element={<Statistics />} />
                     <Route path="/admin" element={<AdminDashboard />} />
                 </Routes>
             </main>

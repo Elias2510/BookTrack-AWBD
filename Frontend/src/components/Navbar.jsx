@@ -33,6 +33,7 @@ function Navbar() {
                         <NavLink to="/reading-lists">
                             Reading Lists
                         </NavLink>
+                        <NavLink to="/statistics">Statistics</NavLink>
                     </>
                 )}
 
